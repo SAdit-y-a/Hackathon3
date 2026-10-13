@@ -1,0 +1,79 @@
+class Account {
+    private String holderName;
+    private String accountNumber;
+    private double balance;
+    private double totalDeposits = 0;
+    private double totalWithdrawals = 0;
+    private StringBuilder history = new StringBuilder();
+    Account(String holderName, String accountNumber, double initialBalance) {
+        this.holderName = holderName.trim().toUpperCase();
+        this.accountNumber = accountNumber;
+        this.balance = initialBalance;
+        history.append("Account opened with Rs. ").append(initialBalance).append("");
+    }
+    void displayAccountInfo() {
+        System.out.println("Account Holder Name : " + holderName);
+        System.out.println("Account Number      : " + accountNumber);
+        System.out.printf("Initial Balance     : Rs", balance);
+    } 
+    void deposit(double amount) {
+        deposit(amount, "Deposit");                     
+    }
+    void deposit(double amount, String description) {
+        balance += amount;
+        totalDeposits += amount;
+        history.append(description).append(": +").append(amount).append("");
+        System.out.printf("Deposit Amount      : Rs", amount);
+        System.out.println("Transaction Status  : Deposit Successful");
+        System.out.printf("Updated Balance     : Rs", balance);
+    }
+    void withdraw(double amount) {
+        withdraw(amount, "Withdrawal");
+    }
+    void withdraw(double amount, String description) {
+        System.out.printf("Withdrawal Amount   : Rs", amount);
+        if (amount > balance) {                         
+            System.out.println("Transaction Status  : Insufficient Balance");
+            System.out.printf("Available Balance   : Rs", balance);
+            history.append(description).append(": FAILED (").append(amount).append(")");
+        } else {
+            balance -= amount;
+            totalWithdrawals += amount;
+            history.append(description).append(": -").append(amount).append("");
+            System.out.println("Transaction Status  : Withdrawal Successful");
+            System.out.printf("Updated Balance     : Rs", balance);
+        }
+    }
+    boolean verifyHolder(String name) {
+        return holderName.equalsIgnoreCase(name.trim());
+    }
+    void displaySummary() {
+        System.out.println(" ACCOUNT SUMMARY ");
+        System.out.println("Account Holder      : " + holderName);
+        System.out.println("Account Number      : " + accountNumber);
+        System.out.printf("Total Deposits      : Rs", totalDeposits);
+        System.out.printf("Total Withdrawals   : Rs", totalWithdrawals);
+        System.out.printf("Final Balance       : Rs", balance);
+    }
+    void displayHistory() {                             
+        System.out.println("TRANSACTION HISTORY ");
+        System.out.print(history);
+    }
+}
+public class BankingLedger {
+    public static void main(String[] args) {
+        System.out.println(" PERSONAL BANKING LEDGER ");
+        Account acc = new Account("  ravi kumar ", "1234567890", 10000);
+        acc.displayAccountInfo();
+        System.out.println(" TRANSACTION DETAILS ");
+        acc.deposit(5000);                              
+        acc.withdraw(2000, "ATM Withdrawal");           
+        acc.withdraw(20000);                            
+        acc.displaySummary();
+        if (acc.verifyHolder("Ravi Kumar")) {
+            System.out.println("Account Holder Verification: Names Match");
+        } else {
+            System.out.println("Account Holder Verification: Names Do Not Match");
+        }
+    }
+}
